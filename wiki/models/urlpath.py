@@ -136,7 +136,7 @@ class URLPath(MPTTModel):
                 return ancestor
         return None
 
-    @atomic
+    @transaction.atomic
     @transaction_commit_on_success
     def delete_subtree(self):
         """
@@ -144,13 +144,11 @@ class URLPath(MPTTModel):
         articles. This is a purged delete and CANNOT be undone.
         """
         try:
-            for descendant in self.get_descendants(
-                    include_self=True).order_by("-level"):
-                descendant.article.delete()
-
-            transaction.commit()
+            with transaction.atomic():
+                for descendant in self.get_descendants(
+                        include_self=True).order_by("-level"):
+                    descendant.article.delete()
         except:
-            transaction.rollback()
             log.exception("Exception deleting article subtree.")
 
     @classmethod
