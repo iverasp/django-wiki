@@ -8,7 +8,6 @@ from wiki.core.plugins.base import BasePlugin
 from wiki.plugins.macros import settings
 
 from wiki.plugins.macros.mdx.macro import MacroExtension
-from wiki.plugins.macros.mdx.toc import WikiTocExtension
 from wiki.plugins.macros.mdx.wikilinks import WikiLinkExtension
 
 
@@ -25,7 +24,7 @@ class MacroPlugin(BasePlugin):
     markdown_extensions = [
         WikiLinkExtension(),
         MacroExtension(),
-        WikiTocExtension()]
+        'markdown.extensions.toc']
 
     def __init__(self):
         pass
